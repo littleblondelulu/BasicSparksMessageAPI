@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MessagesHTML</title>
+</head>
+<body>
+
+<form action="/create-message" method="post">
+    <input type="text" placeholder="Add new message here" name="AddNewMessage" width="200"/>
+    <button type="submit">Submit</button>    <button type="logout">Logout</button>
+    <form action="/logout" method="post"></form>
+</form>
+</form>
+
+<!--USER: "DO SOMETHING" TO AN EXISTING MESSAGE-->
+<!--DropDown button - user selects what action to perform on message: edit or delete -->
+<input type="text" placeholder="Enter Message#" name="Message#" width="200"/>
+<select name="Message Actions">
+    <option selected disabled>Message Actions</option><!--edited messages = submit //// delete message# = delete -->
+    <button type="update">Update</button><button type="submit">Delete</button>
+    <option value="edit-Message">Edit</option>
+    <option value="delete-Message">Delete</option>
+</select>
+<p></p>
+
+<!--List user name and messages here-->
+<p></p>
+Messages by {{name}}:
+<ol><li>{{#messageList}}</li></ol>
+<p></p>
+
+</body>
+</html>
