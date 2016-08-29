@@ -18,17 +18,18 @@ public class Main {
                 ((request, response) -> {
                     //Start session and assign session to user's userName
                     Session session = request.session();
-                    String name = session.attribute("loginName");
+                    String name = session.attribute("userName");
                     User user = users.get(name);
 
-                    //create empty HashMap to use as the model that routes back to the top login page if user == null
+
                     HashMap m = new HashMap();
 
-                    //check to see if user exists & route approp
+                    //check to see if user exists
                     if (user == null) {
-                        return new ModelAndView(m, "create-user.html");
+                        return new ModelAndView(m, "login.html");
                     }
                     else {
+                        m.put("name", name);
                         return new ModelAndView(user, "create-messages.html");
                     }
 
@@ -36,43 +37,44 @@ public class Main {
 
                 //"traffic director"
                 new MustacheTemplateEngine();
-        );
+        )
 
         Spark.post(
-                "/create-user",
+                "/login",
                 (request, response) -> {
                     //Check if user exists and if not, create new user
-                    String name = request.queryParams("loginName");
-                    String passwordInput = request.queryParams("passwordInput");
+                    String name = request.queryParams("userName");
                     User user = users.get(name);
                     if (user == null) {
-                        user = new User(name, passwordInput);
-                        user.setPassword(passwordInput);
+                        user = new User(name);
                         users.put(name, user);
                     }
 
-
                     //Record user session while logged in and store session to user using loginName "so that subsequent connections can see which user is currently logged in" -Ben Sterret
                     Session session = request.session();
-                    session.attribute("loginName", name);
+                    session.attribute("userName", name);
 
+                    String passwordInput = request.queryParams("password");
+                    String password = user.getPassword();
 
                     //Compare passwords to see if input matches user object's pw
-                    if ((passwordInput.length() != user.password.length()) ||
-                       (!(user.password.equals(passwordInput)))){
+                    if ((passwordInput.length() != password.length()) || (!(password.equals(passwordInput)))) {
                         //ADD CODE TO PRINT INVALID PW HERE
                         response.redirect("/");
                         return "";
                     } else {
-                        response.redirect("/create-message"); return "";
+                        response.redirect("create-message.html");
+                        return "";
                     }
 
                     //need to get the username (user) out of session
-                    session.invalidate("loginName");
+                    session.invalidate("userName");
+
                     response.redirect("/");
                     return "";
 
                 })
+        );
 
 
         Spark.post(
