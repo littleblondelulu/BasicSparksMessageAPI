@@ -13,31 +13,28 @@ public class Main {
 
     public static void main(String[] args) {
         Spark.init();
+        //Start by returning the correct template
           Spark.get(
                 "/",
                 ((request, response) -> {
-                    //Start session and assign session to user's userName
                     Session session = request.session();
                     String name = session.attribute("userName");
                     User user = users.get(name);
 
 
                     HashMap m = new HashMap();
-
-                    //check to see if user exists
                     if (user == null) {
                         return new ModelAndView(m, "login.html");
                     }
                     else {
-                        m.put("name", name);
                         return new ModelAndView(user, "create-messages.html");
                     }
 
-                }),
+                })
 
                 //"traffic director"
                 new MustacheTemplateEngine();
-        )
+        );
 
         Spark.post(
                 "/login",
@@ -60,7 +57,6 @@ public class Main {
                     //Compare passwords to see if input matches user object's pw
                     if ((passwordInput.length() != password.length()) || (!(password.equals(passwordInput)))) {
                         //ADD CODE TO PRINT INVALID PW HERE
-                        response.redirect("/");
                         return "";
                     } else {
                         response.redirect("create-message.html");
@@ -76,6 +72,15 @@ public class Main {
                 })
         );
 
+        Spark.post(
+                "/logout",
+                ((request, response) ->{
+                    Session session = request.session();
+                    session.invalidate();
+                    response.redirect("/");
+                    return "";
+                })
+        );
 
         Spark.post(
                 "/create-message",
@@ -91,6 +96,9 @@ public class Main {
                     //Add new user message to user obj's messages ArrayList
                     String addMessage = request.queryParams("add-message");
                     user.messages.add(request.queryParams("add-message"));
+
+                    response.redirect("/");
+                    return "";
                 })
         )
 
@@ -118,12 +126,6 @@ public class Main {
 
          );
 
-        //NOTES: personal ref to syntax
-        // Message to user obj's messages ArrayList
-        //user.get("message#");
-        //.put("messageList", userMessages);
-
-
          Spark.post(
                 "/delete-message",
                    ((request, response) ->{
@@ -145,16 +147,5 @@ public class Main {
                 })
          )
 
-        Spark.post(
-                "/logout",
-                ((request, response) ->{
-                Session session=request.session();
-                session.invalidate();
-
-                response.redirect("/");
-                return"";
-            })
-
-         );
       }
 }

@@ -6,37 +6,29 @@
 </head>
 <body>
 <form action="/create-message" method="post"></form>
-<input type="text" placeholder="Write a message" name="add-message" size="40" width="200"/>
+<input type="text" placeholder="Write a message" name="addMessage" size="40" width="200"/>
 <button type="Submit">Submit</button>
 
 <p></p>
 
-<form action="/edit-message" method="post"></form>
-<input type="text" placeholder="Message #" name="edit-message#"  width="200"/>
-<input type="text" placeholder="Edit message" name="edited-message" size="40"  width="200"/>
+<form action="/edit-message" method="post">
+<input type="text" placeholder="Message #" name="editMessage#"  width="200"/>
+<input type="text" placeholder="Edit message" name="editedMessage" size="40"  width="200"/>
 <button type="Edit">Edit</button>
-
+</form>
 <p></p>
 
-<form action="/delete-message" method="post"></form>
-<input type="text" placeholder="Message #" name="delete-message#"  width="200"/>
+<form action="/delete-message" method="post">
+<input type="text" placeholder="Message #" name="deleteMessage#"  width="200"/>
 <button type="Delete">Delete</button>
+</form>
 
 <p></p>
-
 
 <h3>Messages by {{name}}:</h3>
 
     <ol><li>{{#messageList}}</li></ol>
 
-
-<!--If wanted to use a select list to "perform some action" (ie- edit and delete) to message...
-<select name="Message Actions">
-    <option selected disabled>Message Actions</option>
-    <option value="edit-message">Edit</option>
-    <option value="delete-meessage">Delete</option>
-</select><button type="submit">Submit</button>
--->
 
 </body>
 </html>

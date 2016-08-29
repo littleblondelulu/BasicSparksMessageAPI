@@ -8,7 +8,6 @@ import java.util.ArrayList;
 public class User {
     private String name;
     private String password;
-
     ArrayList<Message> messages = new ArrayList<>();
 
 

@@ -4,5 +4,31 @@
     <button type="submit">Logout</button>
 </form>
 Hello, {{name}}!
+
+<form action="/create-message" method="post"></form>
+<input type="text" placeholder="Write a message" name="addMessage" size="40" width="200"/>
+<button type="Submit">Submit</button>
+
+<p></p>
+
+<form action="/edit-message" method="post">
+    <input type="text" placeholder="Message #" name="editMessage#"  width="200"/>
+    <input type="text" placeholder="Edit message" name="editedMessage" size="40"  width="200"/>
+    <button type="Edit">Edit</button>
+</form>
+<p></p>
+
+<form action="/delete-message" method="post">
+    <input type="text" placeholder="Message #" name="deleteMessage#"  width="200"/>
+    <button type="Delete">Delete</button>
+</form>
+
+<p></p>
+
+<h3>Messages by {{name}}:</h3>
+
+<ol><li>{{#messageList}}</li></ol>
+
+
 </body>
 </html>
