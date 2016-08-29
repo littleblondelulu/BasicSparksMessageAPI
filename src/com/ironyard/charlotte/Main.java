@@ -13,7 +13,6 @@ public class Main {
 
     public static void main(String[] args) {
         Spark.init();
-        //Start by returning the correct template
           Spark.get(
                 "/",
                 ((request, response) -> {
@@ -21,7 +20,7 @@ public class Main {
                     String name = session.attribute("userName");
                     User user = users.get(name);
 
-
+                    //return the correct template
                     HashMap m = new HashMap();
                     if (user == null) {
                         return new ModelAndView(m, "login.html");
@@ -79,11 +78,10 @@ public class Main {
         Spark.post(
                 "/create-message",
                 ((request, response) -> {
-                    //Start session and assign session to user's userName
+                    //Start session and assign it to user
                     String name = request.queryParams("loginName");
                     User user = users.get(name);
 
-                    //Record user session while logged in and store session to user using loginName "so that subsequent connections can see which user is currently logged in" -Ben Sterret
                     Session session = request.session();
                     session.attribute("loginName", name);
 
@@ -131,10 +129,7 @@ public class Main {
                        //change message# to int to get the index
                        String messageNum = request.queryParams("delete-message#");
                        int i = Integer.parseInt(messageNum);
-
-                       //delete message
                        user.messages.remove(i);
-
 
                     response.redirect("/");
                     return "";
