@@ -55,16 +55,10 @@ public class Main {
                     String password = user.getPassword();
 
                     //Compare passwords to see if input matches user object's pw
-                    if ((passwordInput.length() != password.length()) || (!(password.equals(passwordInput)))) {
+                    if ((!(password.equals(passwordInput)))) {
                         //ADD CODE TO PRINT INVALID PW HERE
                         return "";
-                    } else {
-                        response.redirect("create-message.html");
-                        return "";
                     }
-
-                    //need to get the username (user) out of session
-                    session.invalidate("userName");
 
                     response.redirect("/");
                     return "";
@@ -94,8 +88,8 @@ public class Main {
                     session.attribute("loginName", name);
 
                     //Add new user message to user obj's messages ArrayList
-                    String addMessage = request.queryParams("add-message");
-                    user.messages.add(request.queryParams("add-message"));
+                    String addMessage = request.queryParams("addMessage");
+                  //  users.messages.add(request.queryParams("add-message"));
 
                     response.redirect("/");
                     return "";
