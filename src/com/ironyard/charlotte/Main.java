@@ -29,10 +29,10 @@ public class Main {
                         return new ModelAndView(user, "create-messages.html");
                     }
 
-                })
+                }),
 
                 //"traffic director"
-                new MustacheTemplateEngine();
+                new MustacheTemplateEngine()
         );
 
         Spark.post(
@@ -62,7 +62,7 @@ public class Main {
                     response.redirect("/");
                     return "";
 
-                })
+                }),
         );
 
         Spark.post(
