@@ -22,19 +22,19 @@ public class Main {
                     User user = users.get(name);
 
                     //create empty HashMap to use as the model that routes back to the top login page if user == null
-                    HashMap m = new HashMap<>();
+                    HashMap m = new HashMap();
 
-                    //check to see if user exists & return the right template for the condition
+                    //check to see if user exists & route approp
                     if (user == null) {
                         return new ModelAndView(m, "create-user.html");
                     }
                     else {
-                        return new ModelAndView(user, "messages.html");
+                        return new ModelAndView(user, "create-messages.html");
                     }
 
                 }),
 
-                //"traffic director" tool
+                //"traffic director"
                 new MustacheTemplateEngine();
         );
 

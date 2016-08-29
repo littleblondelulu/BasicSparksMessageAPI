@@ -6,16 +6,15 @@ import java.util.ArrayList;
  * Created by lindseyringwald on 8/27/16.
  */
 public class User {
-    String name;
-    String password;
+    private String name;
+    private String password;
 
-    //messages type changed <Message> to <String> -- not sure how/why it changed -- be aware of in case changes again or ends up being a bug somewhere
     ArrayList<Message> messages = new ArrayList<>();
 
 
     public User(String name, String password) {
-        this.name = name;
-        this.password= password;
+        public this.name = name;
+        public this.password= password;
     }
 
     public String getName() {
