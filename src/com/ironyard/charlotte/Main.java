@@ -54,7 +54,7 @@ public class Main {
                     String passwordInput = request.queryParams("password");
                     String password = user.getPassword();
 
-                    //Compare passwords to see if input matches user object's pw
+                    //Compare passwords to see if match
                     if ((!(password.equals(passwordInput)))) {
                         //ADD CODE TO PRINT INVALID PW HERE
                         return "";
