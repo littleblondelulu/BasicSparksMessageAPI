@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MessageInterfaceUsingSparks.iml" filepath="$PROJECT_DIR$/MessageInterfaceUsingSparks.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Sparks-Messages-Web-API.iml" filepath="$PROJECT_DIR$/Sparks-Messages-Web-API.iml" />
     </modules>
   </component>
 </project>

@@ -9,7 +9,8 @@ public class User {
     String name;
     String password;
 
-    ArrayList<String> messages = new ArrayList<>();
+    //messages type changed <Message> to <String> -- not sure how/why it changed -- be aware of in case changes again or ends up being a bug somewhere
+    ArrayList<Message> messages = new ArrayList<>();
 
 
     public User(String name, String password) {
@@ -33,11 +34,11 @@ public class User {
         this.password = password;
     }
 
-    public ArrayList<String> getMessages() {
+    public ArrayList<Message> getMessages() {
         return messages;
     }
 
-    public void setMessages(ArrayList<String> messages) {
+    public void setMessages(ArrayList<Message> messages) {
         this.messages = messages;
     }
 }

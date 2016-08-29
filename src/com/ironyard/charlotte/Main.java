@@ -12,180 +12,147 @@ public class Main {
     static HashMap<String, User> users = new HashMap<>();
 
     public static void main(String[] args) {
-
-//Lulu note: session attribute takes (String val, object value)
-
         Spark.init();
-        Spark.get(
+          Spark.get(
                 "/",
                 ((request, response) -> {
-
-                    //Create & Request a Session to track user activity
+                    //Start session and assign session to user's userName
                     Session session = request.session();
                     String name = session.attribute("loginName");
                     User user = users.get(name);
 
-                    //check to see if user exists
-
-                    //created an empty HashMap (m) to use it as an empty "stand-in" HashMap
-                    //m = empty HashMap to use as the model argument for the null user endpoint
+                    //create empty HashMap to use as the model that routes back to the top login page if user == null
                     HashMap m = new HashMap<>();
 
-                    //if user is null - route back to /create-user which
-                    //Since page doesn't have or display any of the user's saved data the page interface doesn't need to model any user "stuff" so can use m as the empty model here
+                    //check to see if user exists & return the right template for the condition
                     if (user == null) {
                         return new ModelAndView(m, "create-user.html");
                     }
                     else {
-                        //route user to the messages template and model the template'd data for the current user
                         return new ModelAndView(user, "messages.html");
                     }
 
-
                 }),
 
-                //"traffic director"
+                //"traffic director" tool
                 new MustacheTemplateEngine();
-
         );
-
 
         Spark.post(
                 "/create-user",
-                ((request, response) -> {
-                    "/create-user",
-                            ((request, response) -> {
-                                String name = request.queryParams("loginName");
-                                User user = users.get(name);
-                                if (user == null) {
-                                    user = new User(name);
-                                    users.put(name, user);
-                                }
-
-                                Session session = request.session();
-                                session.attribute("userName", name);
-
-                            }
-
-                    //Request session / Assign to current user / Start session as soon as user logs in
-                    Session session = request.session();
-
-                    //Store loginName and password from user into variables which will use to decipher if matches a user obj in users Hash
+                (request, response) -> {
+                    //Check if user exists and if not, create new user
                     String name = request.queryParams("loginName");
-                    //Assigns the current user to the user that's logged in
+                    String passwordInput = request.queryParams("passwordInput");
                     User user = users.get(name);
-
-                    //declare two password variables - one to store pw entered by user and the other to access user's stored password in user's object
-                   //can use passwordEntered to do two things: 1. set new User passwords and 2. test/Match user pw
-                    String passwordEntered = request.queryParams("passwordEntered");
-                    String userPassword = user.getPassword();
-
-
-                    //Check if user exists -- if not; handle by creating new user object
                     if (user == null) {
-                        //Create new user object & save user to users HashMap
-                        user = new User(name, passwordEntered);
-                        user = users.put(name, user);
+                        user = new User(name, passwordInput);
+                        user.setPassword(passwordInput);
+                        users.put(name, user);
                     }
 
-                    //Compare password from user to the object's password -
-        //WANT: to print String from java to a textfield in the "login" html --- HOW??
 
-                    // if passwords don't match - deny access and handle the situation in if stmt
-                    if (!(passwordEntered.equals(userPassword)) {
-                        response.redirect("/create-message");
+                    //Record user session while logged in and store session to user using loginName "so that subsequent connections can see which user is currently logged in" -Ben Sterret
+                    Session session = request.session();
+                    session.attribute("loginName", name);
+
+
+                    //Compare passwords to see if input matches user object's pw
+                    if ((passwordInput.length() != user.password.length()) ||
+                       (!(user.password.equals(passwordInput)))){
+                        //ADD CODE TO PRINT INVALID PW HERE
+                        response.redirect("/");
                         return "";
                     } else {
-                        response.redirect("/create-message");
-                        return "";
-                        //print "Invalid password" in the api text
-                        //System.out.print("Invalid password");
-
-  //and want to handle here the situation by printing a response on the API /login
-// System  = html textbox ------ want to connect Java string to the page -- here's my fluff code...
+                        response.redirect("/create-message"); return "";
                     }
 
-                   response.redirect("/");
+                    //need to get the username (user) out of session
+                    session.invalidate("loginName");
+                    response.redirect("/");
                     return "";
 
-                    })
-
-                };
+                })
 
 
         Spark.post(
                 "/create-message",
                 ((request, response) -> {
+                    //Start session and assign session to user's userName
+                    String name = request.queryParams("loginName");
+                    User user = users.get(name);
 
-      //Start user session and assign current user to the lambda's user variable
+                    //Record user session while logged in and store session to user using loginName "so that subsequent connections can see which user is currently logged in" -Ben Sterret
                     Session session = request.session();
-                    String name = session.attribute("loginName");
-                    user = users.get(name);
+                    session.attribute("loginName", name);
 
                     //Add new user message to user obj's messages ArrayList
-                    user.messages.add(request.queryParams("AddNewMessage"));
-]
+                    String addMessage = request.queryParams("add-message");
+                    user.messages.add(request.queryParams("add-message"));
+                })
+        )
 
-         //Original code: I first wrote the code below to accomplish the add message process and kept it commented out below
-        //In line 111 - combined 2 steps into one line of code - less space, clean, and less room for error
-                        //String addNewMessage = request.queryParams("AddNewMessage");
-                        //String messageClass = user.Message.add(addNewMessage);
+         Spark.post(
+                "/edit-message",
+                    ((request, response) ->{
+                        String name = request.queryParams("loginName");
+                        User user = users.get(name);
+                        Session session=request.session();
+                        session.attribute("loginName", name);
 
+                        // Store the message# in String var and change value to an Integer
+                        String messageNum = request.queryParams("edit-message#");
+                        int i = Integer.parseInt(messageNum);
 
-                    user.get("message#", user);
-                    //.put("messageList", userMessages);
+                        //Replace current message String with new message
+                        //Used arrayList index and setter to do this but syntax is wrong(red)
+                        //Need to make changes here so that it works
+                        String editMessage = user.messages(i-1);
+                        editMessage = user.setMessages(request.queryParams("edited-message"));
 
-//"DO PERFORM AN ACTION ON EXISTING MESSAGE
-// ---------- Edit or Delete
+                        response.redirect("/");
+                        return"";
+                    })
 
-//sort message arrayList *next*
-// find index of message from arrayList and store message in
-     //need to use tDtring to convert the num
-    //TYPES - int mesaage#(msg by index in array --- CONSIDER BT STRINGS AN INDEX
+         );
 
-                    // Store the index# of the message that the user wants to change
-                    int messageNum = request.queryParams("Message#");
-                    if(mess)
-                    String deleteMessage
-
-                    //Need to add  (+1 ?? zero-bas)  --
-                    String messageUnderConstruction;
-                    int messageUnderConstruction = users.get(user.getUserMessages(messageNum));
-                    user.userMessages.toString;
-
-
-
-                    String userAction = request.queryParams("alter-message");
-//change the syntx ofthis if stmt
-                    if(userAction selected EQUALS edit-message")
-                    "delete-message"
-                    else(userAction selected EQUALS edit-message"){
-                    //1. get message# (use - messageNum)
+        //NOTES: personal ref to syntax
+        // Message to user obj's messages ArrayList
+        //user.get("message#");
+        //.put("messageList", userMessages);
 
 
+         Spark.post(
+                "/delete-message",
+                   ((request, response) ->{
+                        String name = request.queryParams("loginName");
+                        User user = users.get(name);
+                        Session session=request.session();
+                        session.attribute("loginName", name);
 
-                    users.get(user.getUserMessages());
+                       //change message# to int to get the index
+                       String messageNum = request.queryParams("delete-message#");
+                       int i = Integer.parseInt(messageNum);
 
-                    boolean alterUserMessage = ()
-
-
-                    // If(EDIT) --
+                       //delete message
+                       user.messages.remove(i);
 
 
                     response.redirect("/");
                     return "";
+                })
+         )
 
+        Spark.post(
+                "/logout",
+                ((request, response) ->{
+                Session session=request.session();
+                session.invalidate();
 
-})
-                }
+                response.redirect("/");
+                return"";
+            })
 
- Spark.post(
-         "/logout",
-         ((request, response) -> {
-         Session session = request.session();
-         session.invalidate();
-         response.redirect("/");
-         return "";
-
+         );
       }
 }

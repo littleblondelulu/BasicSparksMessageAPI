@@ -4,20 +4,29 @@ package com.ironyard.charlotte;
  * Created by lindseyringwald on 8/27/16.
  */
 public class Message extends User{
- //don't really need userMessage variable --
- // used trial/error deciding to make Message it's own Class or store it a local Class in User
- //private String userMessage;
-
+ //Make class fields private
+    String message;
     String editMessage;
-    String editedMessages;
+    String editedMessage;
     String deleteMessage;
-    int accessMessageNumber;
 
-    public Message(String editMessage, String editedMessages, String deleteMessage, int accessMessageNumber) {
+
+
+//Make construcor var's public
+    public String Message(String message, String editMessage, String editedMessage, String deleteMessage) {
+        this.message = message;
         this.editMessage = editMessage;
-        this.editedMessages = editedMessages;
+        this.editedMessage = editedMessage;
         this.deleteMessage = deleteMessage;
-        this.accessMessageNumber = accessMessageNumber;
+    }
+
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getEditMessage() {
@@ -28,12 +37,12 @@ public class Message extends User{
         this.editMessage = editMessage;
     }
 
-    public String getEditedMessages() {
-        return editedMessages;
+    public String getEditedMessage() {
+        this.editedMessage = editedMessage;
     }
 
-    public void setEditedMessages(String editedMessages) {
-        this.editedMessages = editedMessages;
+    public void setEditedMessage() {
+        return editedMessage;
     }
 
     public String getDeleteMessage() {
@@ -44,16 +53,4 @@ public class Message extends User{
         this.deleteMessage = deleteMessage;
     }
 
-    public int getAccessMessageNumber() {
-        return accessMessageNumber;
-    }
-
-    public void setAccessMessageNumber(int accessMessageNumber) {
-        this.accessMessageNumber = accessMessageNumber;
-    }
-
-
 }
-
-//OPTION: CAN MAKE CLASS METHOD FOR IF/ELSE (FOR EDIT AND DELETE) HERE
-// DECIDE IF WANT TO INCLUDE THE "DO SOMETHING TO MESSAGE#" METHOD HERE OR IN MAIN

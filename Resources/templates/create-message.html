@@ -5,30 +5,38 @@
     <title>MessagesHTML</title>
 </head>
 <body>
+<form action="/create-message" method="post"></form>
+<input type="text" placeholder="Write a message" name="add-message" size="40" width="200"/>
+<button type="Submit">Submit</button>
 
-<form action="/create-message" method="post">
-    <input type="text" placeholder="Add new message here" name="AddNewMessage" width="200"/>
-    <button type="submit">Submit</button>    <button type="logout">Logout</button>
-    <form action="/logout" method="post"></form>
-</form>
-</form>
+<p></p>
 
-<!--USER: "DO SOMETHING" TO AN EXISTING MESSAGE-->
-<!--DropDown button - user selects what action to perform on message: edit or delete -->
-<input type="text" placeholder="Enter Message#" name="Message#" width="200"/>
+<form action="/edit-message" method="post"></form>
+<input type="text" placeholder="Message #" name="edit-message#"  width="200"/>
+<input type="text" placeholder="Edit message" name="edited-message" size="40"  width="200"/>
+<button type="Edit">Edit</button>
+
+<p></p>
+
+<form action="/delete-message" method="post"></form>
+<input type="text" placeholder="Message #" name="delete-message#"  width="200"/>
+<button type="Delete">Delete</button>
+
+<p></p>
+
+
+<h3>Messages by {{name}}:</h3>
+
+    <ol><li>{{#messageList}}</li></ol>
+
+
+<!--If wanted to use a select list to "perform some action" (ie- edit and delete) to message...
 <select name="Message Actions">
-    <option selected disabled>Message Actions</option><!--edited messages = submit //// delete message# = delete -->
-    <button type="update">Update</button><button type="submit">Delete</button>
-    <option value="edit-Message">Edit</option>
-    <option value="delete-Message">Delete</option>
-</select>
-<p></p>
-
-<!--List user name and messages here-->
-<p></p>
-Messages by {{name}}:
-<ol><li>{{#messageList}}</li></ol>
-<p></p>
+    <option selected disabled>Message Actions</option>
+    <option value="edit-message">Edit</option>
+    <option value="delete-meessage">Delete</option>
+</select><button type="submit">Submit</button>
+-->
 
 </body>
 </html>
