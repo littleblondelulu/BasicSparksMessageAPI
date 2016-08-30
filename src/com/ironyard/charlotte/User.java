@@ -8,12 +8,17 @@ import java.util.ArrayList;
 public class User {
     private String name;
     private String password;
-    ArrayList<Message> messages = new ArrayList<>();
+
+    public static ArrayList<Message> messages = new ArrayList<>();
 
 
     public User(String name, String password) {
         this.name = name;
-        this.password= password;
+        this.password = password;
+    }
+
+    public static ArrayList<Message> getMessages() {
+        return messages;
     }
 
     public String getName() {
@@ -28,12 +33,11 @@ public class User {
         return password;
     }
 
-    public ArrayList<Message> getMessages() {
-        return messages;
-    }
-
-    public void setMessages(ArrayList<Message> messages) {
-        this.messages = messages;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
+
+
+
 
