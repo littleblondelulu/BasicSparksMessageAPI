@@ -5,33 +5,37 @@ import spark.Session;
 import spark.Spark;
 import spark.template.mustache.MustacheTemplateEngine;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Main {
 
-    //Test
-    User user = new User("lulu", "2345");
-
-
     static HashMap<String, User> users = new HashMap<>();
 
+
     public static void main(String[] args) {
+        User lulu = new User("lulu", "2345");
+        users.put("lulu", lulu);
+
         Spark.init();
+
           Spark.get(
                 "/",
                 ((request, response) -> {
                     Session session = request.session();
+
                     String name = session.attribute("userName");
                     User user = users.get(name);
 
+                    HashMap x = new HashMap<>();
+
                     //return the correct template
-                    HashMap m = new HashMap();
                     if (user == null) {
-                        return new ModelAndView(m, "login.html");
+                        return new ModelAndView(x, "login.html");
                     }
                     else {
-                        return new ModelAndView(user, "home.html");
+                        x.put("name", user.name);
+                        x.put("messageList", user.messages);
+                        return new ModelAndView(x, "home.html");
                     }
 
                 }),
@@ -46,24 +50,24 @@ public class Main {
                     //Check if user exists and if not, create new user
                     String name = request.queryParams("userName");
                     User user = users.get(name);
+                    String password = request.queryParams("password");
                     if (user == null) {
-                        user = new User("userName", name);
+                        user = new User(name, password);
                         users.put(name, user);
                     }
 
                     //Record user session while logged in and store session to user using loginName "so that subsequent connections can see which user is currently logged in" -Ben Sterret
+                    //Compare passwords to see if match
+                   if (!users.get(name).password.equals(password) && user != null) {
+                        Session session = request.session();
+                        session.invalidate();
+
+                       response.redirect("/");
+                    }
+
                     Session session = request.session();
                     session.attribute("userName", name);
 
-                    String passwordInput = request.queryParams("password");
-                    String password = user.getPassword();
-
-                    HashMap m = new HashMap();
-
-                    //Compare passwords to see if match
-                  //  if ((!(passwordInput.equals(password)))) {
-                    //    return new ModelAndView(m, "login.html");
-                    //}
 
                     response.redirect("/");
                     return "";
@@ -71,15 +75,7 @@ public class Main {
                 })
         );
 
-        Spark.post(
-                "/invalidPassword",
-                ((request, response) ->{
-                    Session session = request.session();
-                    session.invalidate();
-                    response.redirect("/");
-                    return "";
-                })
-        );
+
 
         Spark.post(
                 "/logout",
@@ -95,18 +91,17 @@ public class Main {
                 "/create-message",
                 ((request, response) -> {
                     //Start session and assign it to user
-                    String name = request.queryParams("loginName");
+                    String name = request.queryParams("userName");
                     User user = users.get(name);
 
                     Session session = request.session();
-                    session.attribute("loginName", name);
+                    session.attribute("userName");
 
                     //Add new user message to user obj's messages ArrayList
                     String message = request.queryParams("addMessage");
-                    Message m = new Message();
+                    Message m = new Message(message);
 
-                    m.message = message;
-                    User.messages.add(m);
+                    user.messages.add(m);
 
                     response.redirect("/");
                     return "";
@@ -116,24 +111,23 @@ public class Main {
          Spark.post(
                 "/edit-message",
                     ((request, response) ->{
-                        String name = request.queryParams("loginName");
+                        String name = request.queryParams("userName");
                         User user = users.get(name);
 
                         Session session=request.session();
-                        session.attribute("loginName", name);
+                        session.attribute("userName");
 
                         String editMessage = request.queryParams("editMessage#");
                         int i = Integer.parseInt(editMessage);
 
                         //store the String from (message#) index in m
-                        Message m = User.messages.get(i);
 
                         //store the String  want to replace with the current message
                         String message = request.queryParams("editedMessage");
+                        Message z = new Message(message);
+//                        m.setMessage(message);
 
-                        m.setMessage(message);
-
-                        User.messages.add(m);
+                        user.messages.set(i-1, z);
 
                         response.redirect("/");
                         return"";
@@ -144,15 +138,15 @@ public class Main {
          Spark.post(
                 "/delete-message",
                    ((request, response) ->{
-                        String name = request.queryParams("loginName");
+                        String name = request.queryParams("userName");
                         User user = users.get(name);
                         Session session=request.session();
-                        session.attribute("loginName", name);
+                        session.attribute("userName");
 
                        //change message# to int to get the index
-                       String messageNum = request.queryParams("delete-message#");
+                       String messageNum = request.queryParams("deleteMessage#");
                        int i = Integer.parseInt(messageNum);
-                       user.messages.remove(i);
+                       user.messages.remove(i-1);
 
                     response.redirect("/");
                     return "";
