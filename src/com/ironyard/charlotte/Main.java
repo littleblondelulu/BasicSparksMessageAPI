@@ -26,7 +26,7 @@ public class Main {
                         return new ModelAndView(m, "login.html");
                     }
                     else {
-                        return new ModelAndView(user, "create-messages.html");
+                        return new ModelAndView(user, "home.html");
                     }
 
                 }),
