@@ -6,8 +6,8 @@ import java.util.ArrayList;
  * Created by lindseyringwald on 8/27/16.
  */
 public class User {
-    private String name;
-    private String password;
+     public String name;
+     public String password;
 
     public static ArrayList<Message> messages = new ArrayList<>();
 

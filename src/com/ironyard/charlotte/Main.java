@@ -61,9 +61,9 @@ public class Main {
                     HashMap m = new HashMap();
 
                     //Compare passwords to see if match
-                    if ((!(passwordInput.equals(password)))) {
-                        return new ModelAndView(m, "login.html");
-                    }
+                  //  if ((!(passwordInput.equals(password)))) {
+                    //    return new ModelAndView(m, "login.html");
+                    //}
 
                     response.redirect("/");
                     return "";
