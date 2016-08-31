@@ -1,15 +1,17 @@
+<!DOCTYPE html>
 <html>
 <body>
+
 <form action="/logout" method="post">
     <button type="submit">Logout</button>
 </form>
 
+<p></p>
 
 <form action="/create-message" method="post">
-<input type="text" placeholder="Write a message" name="addMessage" size="40" width="200"/>
-<button type="Submit">Submit</button>
+    <input type="text" placeholder="Write a message" name="addMessage" size="40" width="200"/>
+    <button type="Submit">Submit</button>
 </form>
-
 
 <h3>Messages by {{name}}</h3>
 
@@ -31,9 +33,6 @@
     <input type="text" placeholder="Message #" name="deleteMessage#"  width="200"/>
     <button type="Delete">Delete</button>
 </form>
-
-<p></p>
-
 
 
 </body>

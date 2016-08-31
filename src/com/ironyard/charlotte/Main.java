@@ -56,26 +56,21 @@ public class Main {
                         users.put(name, user);
                     }
 
-                    //Record user session while logged in and store session to user using loginName "so that subsequent connections can see which user is currently logged in" -Ben Sterret
                     //Compare passwords to see if match
                    if (!users.get(name).password.equals(password) && user != null) {
                         Session session = request.session();
                         session.invalidate();
-
-                       response.redirect("/");
+                        response.redirect("/");
                     }
 
                     Session session = request.session();
                     session.attribute("userName", name);
-
 
                     response.redirect("/");
                     return "";
 
                 })
         );
-
-
 
         Spark.post(
                 "/logout",
@@ -97,11 +92,7 @@ public class Main {
                     Session session = request.session();
                     session.attribute("userName");
 
-                    //Add new user message to user obj's messages ArrayList
-                    String message = request.queryParams("addMessage");
-                    Message m = new Message(message);
-
-                    user.messages.add(m);
+                    user.messages.add(new Message(request.queryParams("addMessage")));
 
                     response.redirect("/");
                     return "";
@@ -120,12 +111,9 @@ public class Main {
                         String editMessage = request.queryParams("editMessage#");
                         int i = Integer.parseInt(editMessage);
 
-                        //store the String from (message#) index in m
-
-                        //store the String  want to replace with the current message
+                        //replace with the current message
                         String message = request.queryParams("editedMessage");
                         Message z = new Message(message);
-//                        m.setMessage(message);
 
                         user.messages.set(i-1, z);
 
